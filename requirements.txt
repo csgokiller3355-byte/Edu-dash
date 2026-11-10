@@ -1,0 +1,15 @@
+# Django
+Django>=4.2,<5.0
+
+# Production server
+gunicorn>=21.2,<23.0
+
+# Static files
+whitenoise>=6.0,<7.0
+
+# Database
+psycopg2-binary>=2.9,<3.0
+dj-database-url>=1.0,<2.0
+
+# Environment variables
+python-dotenv>=1.0,<2.0

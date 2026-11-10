@@ -1,0 +1,71 @@
+.CodeMirror {
+    height: 400px;
+    border-radius: 1rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 13px;
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-input) !important;
+    overflow: hidden;
+}
+
+.cm-s-dracula.CodeMirror {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Line numbers gutter — clean, non-obtrusive, always visible */
+/* Use highest specificity to override Dracula theme from CDN */
+.cm-s-dracula .CodeMirror-gutters,
+.CodeMirror.cm-s-dracula .CodeMirror-gutters {
+    background: var(--bg-sub-btn) !important;
+    border-right: 2px solid var(--border-card) !important;
+    min-width: 36px !important;
+    width: 36px !important;
+    white-space: nowrap !important;
+    box-shadow: none !important;
+    color: var(--text-muted) !important;
+}
+
+.cm-s-dracula .CodeMirror-linenumber,
+.CodeMirror.cm-s-dracula .CodeMirror-linenumber {
+    color: var(--text-muted) !important;
+    font-size: 11px !important;
+    padding: 0 6px 0 8px !important;
+    text-align: right !important;
+    min-width: 28px !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+    opacity: 0.8 !important;
+}
+
+/* Code content area — proper spacing from gutter */
+.CodeMirror-lines {
+    padding: 4px 4px 4px 8px !important;
+}
+
+/* Scrollbar styling */
+.CodeMirror-scroll {
+    padding: 0;
+}
+
+/* Active line highlight */
+.CodeMirror-activeline-background {
+    background: var(--bg-sub-btn) !important;
+}
+
+/* Selection styling */
+.CodeMirror-selected {
+    background: rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Cursor */
+.CodeMirror-cursor {
+    border-left-color: var(--text-primary) !important;
+}
+
+/* Match highlighting */
+.CodeMirror-matchingbracket {
+    color: var(--text-primary) !important;
+    font-weight: bold;
+    background: var(--bg-sub-btn) !important;
+}

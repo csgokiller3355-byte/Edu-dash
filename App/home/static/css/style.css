@@ -1,0 +1,156 @@
+/* =====================================================
+   MyStat — Custom Styles
+   ===================================================== */
+
+/* Кастомный курсор */
+.cursor-dot {
+    width: 12px;
+    height: 12px;
+    background-color: #6366f1;
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
+    transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+}
+
+/* --- Language toggle / dropdown --- */
+.lang-toggle {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.lang-toggle:hover {
+  color: #4f46e5;
+}
+
+/* --- Password visibility toggle --- */
+.password-toggle {
+  cursor: pointer;
+  transition: color 0.2s ease;
+  user-select: none;
+}
+
+.password-toggle:hover {
+  color: #4b5563;
+}
+
+/* --- Form input focus state --- */
+.form-input {
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  background-color: #fff;
+}
+
+/* --- Submit button --- */
+.btn-primary {
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #4338ca;
+}
+
+/* --- Forgot password link --- */
+.link-secondary {
+  transition: color 0.2s ease;
+}
+
+.link-secondary:hover {
+  color: #4f46e5;
+}
+
+/* --- App store badges --- */
+.app-badge {
+  transition: opacity 0.2s ease;
+}
+
+.app-badge:hover {
+  opacity: 0.8;
+}
+
+/* =====================================================
+   Auth Tabs (Login / Register)
+   ===================================================== */
+
+/* Auth tab buttons */
+.auth-tab {
+  transition: all 0.2s ease;
+}
+
+.auth-tab:hover {
+  opacity: 0.9;
+}
+
+/* Auth panels (login / register) */
+.auth-panel {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Alert messages */
+.auth-alert {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Registration button (emerald green) */
+.btn-register {
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-register:hover {
+  background-color: #047857;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Form field error highlighting */
+.form-input.error {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+/* Django form error messages */
+ul.errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+  color: #dc2626;
+  font-size: 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+ul.errorlist li {
+  padding: 2px 0;
+}

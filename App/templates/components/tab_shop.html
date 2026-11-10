@@ -1,0 +1,26 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/tab_shop.css' %}">
+<script type="module" src="{% static 'js/dashboard-f/shop.js' %}"></script>
+
+<div class="tab-pane" id="shop">
+    <h2>Магазин наград</h2>
+    <p>Тратьте монетки, заработанные за учебу!</p>
+    <div class="shop-grid">
+        <div class="shop-item">
+            <h4>Уникальная тема профиля</h4>
+            <p class="flex items-center justify-center gap-1.5 font-semibold">
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-400 text-amber-950 font-bold text-[10px] border border-amber-300 shadow-sm" style="font-family: monospace;">¢</span>
+                50 монеток
+            </p>
+            <button class="btn-primary buy-btn mt-3" data-price="50">Купить</button>
+        </div>
+        <div class="shop-item">
+            <h4>Защита от дедлайна (1 раз)</h4>
+            <p class="flex items-center justify-center gap-1.5 font-semibold">
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-400 text-amber-950 font-bold text-[10px] border border-amber-300 shadow-sm" style="font-family: monospace;">¢</span>
+                100 монеток
+            </p>
+            <button class="btn-primary buy-btn mt-3" data-price="100">Купить</button>
+        </div>
+    </div>
+</div>

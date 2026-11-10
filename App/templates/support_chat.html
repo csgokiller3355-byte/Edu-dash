@@ -1,0 +1,508 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поддержка — Учебный Дашборд</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .support-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .support-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .support-header h1 {
+            font-size: 1.8rem;
+            color: var(--text-heading);
+            margin-bottom: 0.5rem;
+        }
+        .support-header p {
+            color: var(--text-secondary);
+        }
+        .support-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .support-card h3 {
+            color: var(--text-heading);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .support-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .support-card a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+        .support-card a:hover {
+            text-decoration: underline;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-back-btn);
+            color: var(--text-back-btn);
+            border: 1px solid var(--border-back-btn);
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin-bottom: 1.5rem;
+        }
+        .back-btn:hover {
+            background: #4f46e5;
+            border-color: #4f46e5;
+        }
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .contact-method {
+            background: var(--bg-input);
+            border: 1px solid var(--border-input);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .contact-method:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+        .contact-method .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .contact-method .label {
+            color: var(--text-heading);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .contact-method .detail {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .faq-section {
+            margin-top: 1rem;
+        }
+        .faq-item {
+            border-bottom: 1px solid var(--border-card);
+            padding: 0.75rem 0;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-question {
+            color: var(--text-heading);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-question:hover {
+            color: var(--accent-primary);
+        }
+        .faq-answer {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+            line-height: 1.6;
+        }
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+        .faq-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+        .faq-item.open .faq-toggle {
+            transform: rotate(45deg);
+        }
+        /* Live Chat Widget */
+        .chat-widget {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 380px;
+            max-width: calc(100vw - 2rem);
+            height: 500px;
+            max-height: calc(100vh - 3rem);
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow-card);
+            z-index: 1000;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .chat-widget.open {
+            display: flex;
+        }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(135deg, var(--accent-gradient-start), #7c3aed);
+            color: #ffffff;
+        }
+        .chat-header h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .chat-header .status {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        .chat-close {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .chat-close:hover {
+            opacity: 1;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .chat-message {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .chat-message.bot {
+            align-self: flex-start;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+        .chat-message.user {
+            align-self: flex-end;
+            background: var(--accent-primary);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-input-area {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-top: 1px solid var(--border-card);
+        }
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border-input);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .chat-input:focus {
+            border-color: var(--accent-primary);
+        }
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+        .chat-send {
+            padding: 0.75rem 1.25rem;
+            background: var(--accent-primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .chat-send:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="support-container">
+        <!-- Back button -->
+        <a href="{% url 'dashboard' %}" class="back-btn">
+            ← Вернуться на дашборд
+        </a>
+
+        <!-- Header -->
+        <div class="support-header">
+            <h1>📬 Служба поддержки</h1>
+            <p>Мы поможем решить вашу проблему или ответить на вопрос</p>
+        </div>
+
+        <!-- Contact methods -->
+        <div class="support-card">
+            <h3>Способы связи</h3>
+            <div class="contact-methods">
+                <div class="contact-method" id="btnLiveChat" style="cursor: pointer;">
+                    <div class="icon">💬</div>
+                    <div class="label">Онлайн-чат</div>
+                    <div class="detail">Начать диалог с поддержкой</div>
+                </div>
+                <div class="contact-method">
+                    <div class="icon">📨</div>
+                    <div class="label">Telegram</div>
+                    <div class="detail">@support_dashboard</div>
+                </div>
+                <div class="contact-method">
+                    <div class="icon">📧</div>
+                    <div class="label">Email</div>
+                    <div class="detail">support@dashboard.ru</div>
+                </div>
+                <div class="contact-method">
+                    <div class="icon">📋</div>
+                    <div class="label">Обратная связь</div>
+                    <div class="detail">Вкладка «Советы и отзывы»</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User info -->
+        <div class="support-card">
+            <h3>👤 Ваша информация</h3>
+            <p>
+                <strong>Имя:</strong> {{ user.get_full_name|default:user.username }}<br>
+                <strong>Email:</strong> {{ user.email|default:"Не указан" }}<br>
+                <strong>Ранг:</strong> {{ user.rank }}<br>
+                <strong>XP:</strong> {{ user.xp }}
+            </p>
+        </div>
+
+        <!-- Quick FAQ -->
+        <div class="support-card">
+            <h3>❓ Частые вопросы</h3>
+            <div class="faq-section">
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-question">
+                        Как начисляются XP?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        XP начисляется за выполнение домашних заданий и проектов. Чем выше оценка, тем больше опыта вы получаете. XP определяет ваш ранг в системе.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-question">
+                        Как повысить свой ранг?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Выполняйте домашние задания, получайте высокие оценки и посещайте занятия. Каждый проект приносит XP, а накопленный XP автоматически повышает ваш ранг.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-question">
+                        Что делать, если работа отправлена на доработку?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Исправьте указанные ошибки в коде и отправьте файл повторно во вкладке «Домашние задания». Статус изменится на «На проверке».
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-question">
+                        Как создать совместный проект?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Перейдите во вкладку «Совместные работы» и нажмите кнопку «+ Создать свою инициативу». Заполните название и описание проекта.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-question">
+                        Как сменить тему оформления?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Перейдите во вкладку «Настройки» и в разделе «Внешний вид» выберите нужную тему: Тёмная, Светлая или Системная.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report a bug -->
+        <div class="support-card">
+            <h3>🐛 Сообщить об ошибке</h3>
+            <p>
+                Если вы обнаружили ошибку или баг в системе, пожалуйста, опишите её в
+                <a href="{% url 'dashboard' %}"># вкладке «Советы и отзывы»</a>
+                или напишите нам в Telegram. Укажите:
+            </p>
+            <ul style="color: var(--text-secondary); margin-top: 0.5rem; padding-left: 1.5rem; line-height: 1.8;">
+                <li>Что вы делали перед ошибкой</li>
+                <li>Какая вкладка была открыта</li>
+                <li>Скриншот ошибки (если возможно)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Live Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header">
+            <div>
+                <h4>💬 Онлайн-чат поддержки</h4>
+                <div class="status">● Оператор онлайн</div>
+            </div>
+            <button class="chat-close" id="btnCloseChat">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message bot">
+                Здравствуйте! 👋 Я — оператор поддержки EduDash. Чем могу помочь?
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Введите сообщение..." autocomplete="off">
+            <button class="chat-send" id="btnSendChat">Отправить</button>
+        </div>
+    </div>
+
+    <script>
+        // Restore theme from localStorage so CSS variables match the dashboard
+        (function() {
+            var savedTheme = localStorage.getItem('settings_theme');
+            var body = document.body;
+            if (savedTheme === 'light') {
+                body.classList.add('theme-light');
+            } else if (savedTheme === 'dark') {
+                body.classList.add('theme-dark');
+            } else if (savedTheme === 'auto' || !savedTheme) {
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                body.classList.add(prefersDark ? 'theme-dark' : 'theme-light');
+            }
+        })();
+
+        function getCsrfToken() {
+            var name = 'csrftoken';
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Chat widget toggle
+        const chatWidget = document.getElementById('chatWidget');
+        const btnLiveChat = document.getElementById('btnLiveChat');
+        const btnCloseChat = document.getElementById('btnCloseChat');
+        const chatInput = document.getElementById('chatInput');
+        const btnSendChat = document.getElementById('btnSendChat');
+        const chatMessages = document.getElementById('chatMessages');
+
+        btnLiveChat.addEventListener('click', function() {
+            chatWidget.classList.add('open');
+            chatInput.focus();
+        });
+
+        btnCloseChat.addEventListener('click', function() {
+            chatWidget.classList.remove('open');
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && chatWidget.classList.contains('open')) {
+                chatWidget.classList.remove('open');
+            }
+        });
+
+        function addMessage(text, type) {
+            const msg = document.createElement('div');
+            msg.className = 'chat-message ' + type;
+            msg.textContent = text;
+            chatMessages.appendChild(msg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // Add user message to chat UI
+            addMessage(text, 'user');
+            chatInput.value = '';
+
+            // Save the message as a real feedback entry in the database
+            fetch('/submit-feedback/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                body: JSON.stringify({ text: text })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.status === 'ok') {
+                    // Show confirmation bot message
+                    addMessage('✅ Ваше сообщение отправлено! Оператор ответит вам в ближайшее время. Ответ появится во вкладке «Уведомления» на дашборде.', 'bot');
+                } else {
+                    addMessage('❌ Ошибка при отправке: ' + data.message, 'bot');
+                }
+            })
+            .catch(function() {
+                addMessage('❌ Ошибка сети. Проверьте подключение.', 'bot');
+            });
+        }
+
+        btnSendChat.addEventListener('click', sendMessage);
+
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

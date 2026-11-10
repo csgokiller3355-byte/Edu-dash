@@ -1,0 +1,44 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/tab_calendar.css' %}">
+<script type="module" src="{% static 'js/dashboard-f/calendar.js' %}"></script>
+
+<div class="tab-pane" id="calendar">
+    <h2 id="calendarTitle">Календарь планирования</h2>
+    <div class="card calendar-card">
+        <div class="calendar-header">
+            <button class="cal-nav-btn cal-nav-prev" id="calPrevBtn" type="button">&lt;</button>
+            <span class="cal-month-year" id="calMonthYear"></span>
+            <button class="cal-nav-btn cal-nav-next" id="calNextBtn" type="button">&gt;</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Дни недели и ячейки будут сгенерированы динамически через JavaScript -->
+        </div>
+
+        <!-- Легенда календаря -->
+        <div class="calendar-legend">
+            <div class="legend-item"><span class="dot today-dot"></span> Сегодня</div>
+            <div class="legend-item"><span class="dot red-dot"></span> Дедлайн ДЗ</div>
+            <div class="legend-item"><span class="dot yellow-dot"></span> Оценка проекта</div>
+            <div class="legend-item"><span class="dot blue-dot"></span> Моя задача</div>
+            <div class="legend-item"><span class="dot absent-dot"></span> Отсутствовал</div>
+            <div class="legend-item"><span class="dot late-dot"></span> Опоздал</div>
+        </div>
+
+        <!-- Add Task Form -->
+        <div class="calendar-actions mt-6 p-4 rounded-2xl border" style="background-color: var(--bg-card); border-color: var(--border-card);">
+            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-heading);">Добавить задачу</h3>
+            <form id="addCalendarTaskForm" class="task-form space-y-3">
+                <div class="form-group">
+                    <input type="text" id="taskTitle" name="title" placeholder="Заголовок задачи" required class="form-control w-full px-4 py-2 rounded-xl border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500" style="background-color: var(--bg-pill); color: var(--text-pill); border-color: var(--border-card);">
+                </div>
+                <div class="form-group">
+                    <input type="date" id="taskDate" name="date" required class="form-control w-full px-4 py-2 rounded-xl border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500" style="background-color: var(--bg-pill); color: var(--text-pill); border-color: var(--border-card);">
+                </div>
+                <div class="form-group">
+                    <textarea id="taskDescription" name="description" placeholder="Описание (необязательно)" class="form-control w-full px-4 py-2 rounded-xl border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none" style="background-color: var(--bg-pill); color: var(--text-pill); border-color: var(--border-card);" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary px-5 py-2.5 rounded-xl font-medium text-sm transition shadow-sm">Сохранить задачу</button>
+            </form>
+        </div>
+    </div>
+</div>

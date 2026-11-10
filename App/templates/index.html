@@ -1,0 +1,496 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page_title">MyStat - Авторизация</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-gray-900 m-0 p-0 font-sans relative min-h-screen overflow-x-hidden">
+
+    <!-- ФУТУРИСТИЧЕСКИЙ ПРЕЛОАДЕР -->
+    <div id="preloader" class="fixed inset-0 z-50 bg-gray-950 flex flex-col items-center justify-center transition-all duration-700 overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(99,102,241,0.15),rgba(255,255,255,0))]"></div>
+
+        <div class="relative flex flex-col items-center justify-center z-10">
+            <div class="relative w-36 h-36 flex items-center justify-center">
+                <!-- Внешнее кольцо -->
+                <div class="absolute inset-0 rounded-full border-2 border-indigo-500/20 border-t-indigo-500 border-r-purple-500 animate-spin" style="animation-duration: 2s;"></div>
+                <!-- Внутреннее пунктирное кольцо -->
+                <div class="absolute inset-3 rounded-full border border-dashed border-cyan-400/40 animate-spin" style="animation-direction: reverse; animation-duration: 4s;"></div>
+                <!-- Центральный элемент -->
+                <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-600 p-[2px] shadow-2xl shadow-indigo-500/50 animate-pulse">
+                    <div class="w-full h-full bg-gray-950 rounded-2xl flex items-center justify-center backdrop-blur-xl">
+                        <span class="text-white font-black text-xl tracking-tighter bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">MS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center space-y-2">
+                <div class="text-base font-bold tracking-widest text-white uppercase bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
+                    MyStat Secure Core
+                </div>
+
+                <div class="flex items-center justify-center space-x-2 text-xs text-gray-400 font-mono">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span id="loader-status">Инициализация ядра...</span>
+                    <span id="loader-percent" class="text-indigo-400 font-bold">0%</span>
+                </div>
+
+                <div class="w-52 h-1.5 bg-gray-900 rounded-full overflow-hidden mt-4 mx-auto border border-white/5 shadow-inner">
+                    <div id="loader-bar" class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transition-all duration-300 w-0 shadow-lg shadow-indigo-500/50"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div class="min-h-screen w-full relative flex flex-col justify-between p-6 md:p-10 bg-cover bg-center"
+         style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1920&q=80');">
+
+        <div class="absolute inset-0 bg-indigo-950/60 bg-gradient-to-br from-indigo-950/70 to-purple-950/70"></div>
+
+        <!-- Шапка -->
+        <div class="relative z-10 flex justify-between items-center w-full max-w-7xl mx-auto">
+            <span class="text-white font-bold text-3xl tracking-tight drop-shadow-md">MyStat</span>
+
+            <!-- Кастомный выбор языка -->
+            <div class="relative text-left" id="langDropdownContainer">
+                <button id="langDropdownButton" type="button" class="flex items-center space-x-2 text-white text-sm font-medium bg-white/10 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/20 shadow-lg transition hover:bg-white/15 focus:outline-none">
+                    <svg class="w-5 h-5 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                    </svg>
+                    <span id="currentLangText">Русский</span>
+                    <svg class="w-4 h-4 text-white opacity-70 transition-transform duration-200" id="langArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <!-- Скрытый оригинальный селект для связи с логикой переводов -->
+                <select class="lang-selector hidden" id="hiddenLangSelect">
+                    <option value="ru">Русский</option>
+                    <option value="en">English</option>
+                    <option value="uz">O‘zbekcha</option>
+                </select>
+
+                <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-40 rounded-xl bg-gray-950/90 backdrop-blur-xl border border-white/20 shadow-2xl overflow-hidden z-50">
+                    <div class="py-1">
+                        <button onclick="setLanguage('ru', 'Русский')" class="w-full text-left px-4 py-2.5 text-sm text-white hover:bg-white/10 transition flex items-center justify-between">
+                            Русский <span class="lang-check text-indigo-400" data-lang="ru">✓</span>
+                        </button>
+                        <button onclick="setLanguage('en', 'English')" class="w-full text-left px-4 py-2.5 text-sm text-white hover:bg-white/10 transition flex items-center justify-between">
+                            English <span class="lang-check text-indigo-400 hidden" data-lang="en">✓</span>
+                        </button>
+                        <button onclick="setLanguage('uz', 'O‘zbekcha')" class="w-full text-left px-4 py-2.5 text-sm text-white hover:bg-white/10 transition flex items-center justify-between">
+                            O‘zbekcha <span class="lang-check text-indigo-400 hidden" data-lang="uz">✓</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Центр -->
+        <div class="relative z-10 flex flex-col items-center justify-center my-auto w-full py-8">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white text-center mb-8 tracking-tight drop-shadow-lg" data-i18n="welcome_title">
+                Добро пожаловать
+            </h1>
+
+            <div class="w-full max-w-md bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/30">
+
+                <!-- Табы: Вход / Регистрация -->
+                <div class="flex mb-6 bg-gray-100 rounded-xl p-1">
+                    <button type="button"
+                            id="tabLogin"
+                            class="auth-tab flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-indigo-600 shadow-sm"
+                            data-tab="login">
+                        <span data-i18n="login_title">Вход</span>
+                    </button>
+                    <button type="button"
+                            id="tabRegister"
+                            class="auth-tab flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 text-gray-500 hover:text-gray-700"
+                            data-tab="register">
+                        <span data-i18n="register_title">Регистрация</span>
+                    </button>
+                </div>
+
+                <!-- Сообщения об ошибках и успехе -->
+                {% if error %}
+                    <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-xl text-sm text-center auth-alert">
+                        {{ error }}
+                    </div>
+                {% endif %}
+                {% if success %}
+                    <div class="mb-4 p-3 bg-emerald-100 border border-emerald-400 text-emerald-700 rounded-xl text-sm text-center auth-alert">
+                        {{ success }}
+                    </div>
+                {% endif %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="mb-4 p-3 {% if message.tags == 'success' %}bg-emerald-100 border border-emerald-400 text-emerald-700{% else %}bg-red-100 border border-red-400 text-red-700{% endif %} rounded-xl text-sm text-center auth-alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- ====== ФОРМА ВХОДА ====== -->
+                <div id="loginPanel" class="auth-panel">
+                    <form action="" method="POST" class="space-y-4" id="loginForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="login_action" value="1">
+
+                        {% if login_form %}
+                            <div>
+                                {{ login_form.username }}
+                            </div>
+                            <div class="relative">
+                                {{ login_form.password }}
+                                <span id="togglePassword" class="password-toggle absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 cursor-pointer hover:text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        {% else %}
+                            <div>
+                                <input type="text"
+                                       name="username"
+                                       data-i18n-placeholder="email_placeholder"
+                                       placeholder="E-mail или Логин*"
+                                       class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 text-sm focus:outline-none" required>
+                            </div>
+                            <div class="relative">
+                                <input type="password"
+                                       id="passwordField"
+                                       name="password"
+                                       data-i18n-placeholder="password_placeholder"
+                                       placeholder="Пароль*"
+                                       class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 text-sm focus:outline-none" required>
+                                <span id="togglePassword" class="password-toggle absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 cursor-pointer hover:text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        {% endif %}
+
+                        <div class="flex justify-end">
+                            <a href="#" class="link-secondary text-xs text-gray-500 hover:text-indigo-600 transition" data-i18n="forgot_password">Забыли пароль?</a>
+                        </div>
+
+                        <button type="submit" class="btn-primary w-full py-3 bg-indigo-600 text-white font-medium rounded-xl shadow-lg shadow-indigo-100 transition">
+                            <span data-i18n="submit_button">Войти</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- ====== ФОРМА РЕГИСТРАЦИИ ====== -->
+                <div id="registerPanel" class="auth-panel hidden">
+                    <form action="{% url 'register' %}" method="POST" class="space-y-3" id="registerForm">
+                        {% csrf_token %}
+
+                        {% if register_form %}
+                            <div>
+                                {{ register_form.username }}
+                            </div>
+                            <div>
+                                {{ register_form.first_name }}
+                            </div>
+                            <div>
+                                {{ register_form.last_name }}
+                            </div>
+                            <div>
+                                {{ register_form.email }}
+                            </div>
+                            <div>
+                                {{ register_form.password1 }}
+                            </div>
+                            <div>
+                                {{ register_form.password2 }}
+                            </div>
+                        {% else %}
+                            <div>
+                                <input type="text" name="username" placeholder="Логин*" class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 text-sm focus:outline-none" required>
+                            </div>
+                            <div>
+                                <input type="text" name="first_name" placeholder="Имя*" class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 text-sm focus:outline-none" required>
+                            </div>
+                            <div>
+                                <input type="text" name="last_name" placeholder="Фамилия*" class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 text-sm focus:outline-none" required>
+                            </div>
+                            <div>
+                                <input type="email" name="email" placeholder="E-mail*" class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 text-sm focus:outline-none" required>
+                            </div>
+                            <div>
+                                <input type="password" name="password1" placeholder="Пароль*" class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 text-sm focus:outline-none" required>
+                            </div>
+                            <div>
+                                <input type="password" name="password2" placeholder="Подтвердите пароль*" class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 text-sm focus:outline-none" required>
+                            </div>
+                        {% endif %}
+
+                        <button type="submit" class="btn-primary w-full py-3 bg-emerald-600 text-white font-medium rounded-xl shadow-lg shadow-emerald-100 transition hover:bg-emerald-700">
+                            <span data-i18n="register_button">Зарегистрироваться</span>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Низ -->
+        <div class="relative z-10 flex justify-center items-center space-x-4 pb-2">
+            <a href="#" class="app-badge block hover:opacity-80 transition opacity-90">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="h-8">
+            </a>
+            <a href="#" class="app-badge block hover:opacity-80 transition opacity-90">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" class="h-8">
+            </a>
+        </div>
+    </div>
+
+    <!-- Элемент точки для курсора -->
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <!-- JavaScript логика -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Логика прелоадера с минимальной задержкой 2 секунды
+            const startTime = Date.now();
+            let progress = 0;
+            const percentEl = document.getElementById('loader-percent');
+            const barEl = document.getElementById('loader-bar');
+            const statusEl = document.getElementById('loader-status');
+
+            const statuses = [
+                "Инициализация ядра...",
+                "Загрузка стилей и локализации...",
+                "Подключение к защищенной сессии...",
+                "Система готова!"
+            ];
+
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 8) + 3;
+                if (progress > 95) progress = 95;
+
+                if (percentEl) percentEl.innerText = progress + '%';
+                if (barEl) barEl.style.width = progress + '%';
+
+                if (progress > 30 && progress < 65) {
+                    statusEl.innerText = statuses[1];
+                } else if (progress >= 65) {
+                    statusEl.innerText = statuses[2];
+                }
+            }, 80);
+
+            window.addEventListener('load', () => {
+                const elapsedTime = Date.now() - startTime;
+                const minDuration = 2000;
+                const remainingTime = Math.max(0, minDuration - elapsedTime);
+
+                setTimeout(() => {
+                    clearInterval(interval);
+                    if (percentEl) percentEl.innerText = '100%';
+                    if (barEl) barEl.style.width = '100%';
+                    if (statusEl) statusEl.innerText = statuses[3];
+
+                    setTimeout(() => {
+                        const preloader = document.getElementById('preloader');
+                        if (preloader) {
+                            preloader.style.opacity = '0';
+                            preloader.style.visibility = 'hidden';
+                            setTimeout(() => {
+                                preloader.style.display = 'none';
+                            }, 700);
+                        }
+                    }, 400);
+                }, remainingTime);
+            });
+
+            // 2. Логика кастомного выпадающего меню языков
+            const dropdownButton = document.getElementById('langDropdownButton');
+            const dropdownMenu = document.getElementById('langDropdownMenu');
+            const langArrow = document.getElementById('langArrow');
+
+            if (dropdownButton && dropdownMenu) {
+                dropdownButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('hidden');
+                    langArrow.classList.toggle('rotate-180');
+                });
+
+                window.addEventListener('click', () => {
+                    if (!dropdownMenu.classList.contains('hidden')) {
+                        dropdownMenu.classList.add('hidden');
+                        langArrow.classList.remove('rotate-180');
+                    }
+                });
+            }
+
+            // 3. Переключение вкладок Вход / Регистрация
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
+            const loginPanel = document.getElementById('loginPanel');
+            const registerPanel = document.getElementById('registerPanel');
+
+            function switchTab(tab) {
+                if (tab === 'login') {
+                    tabLogin.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+                    tabLogin.classList.remove('text-gray-500', 'hover:text-gray-700');
+                    tabRegister.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+                    tabRegister.classList.add('text-gray-500', 'hover:text-gray-700');
+                    if (loginPanel) loginPanel.classList.remove('hidden');
+                    if (registerPanel) registerPanel.classList.add('hidden');
+                } else {
+                    tabRegister.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+                    tabRegister.classList.remove('text-gray-500', 'hover:text-gray-700');
+                    tabLogin.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+                    tabLogin.classList.add('text-gray-500', 'hover:text-gray-700');
+                    if (registerPanel) registerPanel.classList.remove('hidden');
+                    if (loginPanel) loginPanel.classList.add('hidden');
+                }
+            }
+
+            if (tabLogin && tabRegister) {
+                tabLogin.addEventListener('click', () => switchTab('login'));
+                tabRegister.addEventListener('click', () => switchTab('register'));
+            }
+
+            // 4. Переключение видимости пароля (глазок)
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordField = document.getElementById('passwordField');
+
+            if (togglePassword && passwordField) {
+                togglePassword.addEventListener('click', () => {
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                });
+            }
+
+            // 4. Плавный курсор с инерцией (шлейфом)
+            const cursor = document.getElementById('cursorDot');
+            if (cursor) {
+                let mouseX = 0;
+                let mouseY = 0;
+                let cursorX = 0;
+                let cursorY = 0;
+                const speed = 0.2;
+
+                window.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                });
+
+                function animateCursor() {
+                    cursorX += (mouseX - cursorX) * speed;
+                    cursorY += (mouseY - cursorY) * speed;
+                    cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+                    requestAnimationFrame(animateCursor);
+                }
+                animateCursor();
+
+                document.querySelectorAll('a, button, input, [role="button"]').forEach(element => {
+                    element.addEventListener('mouseenter', () => {
+                        cursor.style.width = '24px';
+                        cursor.style.height = '24px';
+                        cursor.style.backgroundColor = 'rgba(99, 102, 241, 0.4)';
+                    });
+                    element.addEventListener('mouseleave', () => {
+                        cursor.style.width = '12px';
+                        cursor.style.height = '12px';
+                        cursor.style.backgroundColor = '#6366f1';
+                    });
+                });
+            }
+        });
+
+        // Словари переводов для интерфейса
+        const translations = {
+            ru: {
+                page_title: "MyStat - Авторизация",
+                welcome_title: "Добро пожаловать",
+                login_title: "Вход",
+                register_title: "Регистрация",
+                email_placeholder: "E-mail или Логин*",
+                password_placeholder: "Пароль*",
+                forgot_password: "Забыли пароль?",
+                submit_button: "Войти",
+                register_button: "Зарегистрироваться"
+            },
+            en: {
+                page_title: "MyStat - Authorization",
+                welcome_title: "Welcome",
+                login_title: "Login",
+                register_title: "Register",
+                email_placeholder: "E-mail or Login*",
+                password_placeholder: "Password*",
+                forgot_password: "Forgot password?",
+                submit_button: "Login",
+                register_button: "Sign Up"
+            },
+            uz: {
+                page_title: "MyStat - Avtorizatsiya",
+                welcome_title: "Xush kelibsiz",
+                login_title: "Kirish",
+                register_title: "Ro'yxatdan o'tish",
+                email_placeholder: "E-mail yoki Login*",
+                password_placeholder: "Parol*",
+                forgot_password: "Parolni unutdingizmi?",
+                submit_button: "Kirish",
+                register_button: "Ro'yxatdan o'tish"
+            }
+        };
+
+        // Функция применения переводов на страницу
+        function applyTranslations(lang) {
+            const dict = translations[lang];
+            if (!dict) return;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    el.innerText = dict[key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (dict[key]) {
+                    el.setAttribute('placeholder', dict[key]);
+                }
+            });
+        }
+
+        // Глобальная функция смены языка
+        function setLanguage(langCode, langName) {
+            const langTextEl = document.getElementById('currentLangText');
+            if (langTextEl) langTextEl.innerText = langName;
+
+            document.querySelectorAll('.lang-check').forEach(el => {
+                if (el.getAttribute('data-lang') === langCode) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            const dropdownMenu = document.getElementById('langDropdownMenu');
+            const langArrow = document.getElementById('langArrow');
+            if (dropdownMenu) dropdownMenu.classList.add('hidden');
+            if (langArrow) langArrow.classList.remove('rotate-180');
+
+            applyTranslations(langCode);
+
+            const hiddenSelect = document.getElementById('hiddenLangSelect');
+            if (hiddenSelect) {
+                hiddenSelect.value = langCode;
+                hiddenSelect.dispatchEvent(new Event('change'));
+            }
+        }
+    </script>
+
+</body>
+</html>

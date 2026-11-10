@@ -1,0 +1,68 @@
+/* =====================================================
+   MyStat — Custom Styles
+   ===================================================== */
+
+/* --- Language toggle button --- */
+.lang-toggle {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.lang-toggle:hover {
+  color: #4f46e5; /* indigo-600 */
+}
+
+/* --- Password visibility toggle --- */
+.password-toggle {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #4b5563; /* gray-600 */
+}
+
+/* --- Form input focus state --- */
+.form-input {
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #4f46e5; /* indigo-600 */
+  background-color: #fff;
+}
+
+/* --- Submit button --- */
+.btn-primary {
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #4338ca; /* indigo-700 */
+}
+
+/* --- Forgot password link --- */
+.link-secondary {
+  transition: color 0.2s ease;
+}
+
+.link-secondary:hover {
+  color: #4f46e5; /* indigo-600 */
+}
+
+/* --- App store badges --- */
+.app-badge {
+  transition: opacity 0.2s ease;
+}
+
+.app-badge:hover {
+  opacity: 0.8;
+}
+
+/* --- Right panel decorative cards --- */
+.deco-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+}

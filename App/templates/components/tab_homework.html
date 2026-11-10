@@ -1,0 +1,146 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/tab_homework.css' %}">
+<script type="module" src="{% static 'js/dashboard-f/homework.js' %}"></script>
+
+<div class="tab-pane" id="homework">
+    <div class="homework-section" id="hwListView">
+        <h2>Домашние задания</h2>
+
+        <!-- Кнопки-переключатели (фильтры) -->
+        <div class="hw-tabs">
+            <button class="hw-tab-btn active" data-filter="checking">На проверке ({{ homework_checking_count }})</button>
+            <button class="hw-tab-btn" data-filter="graded">Оцененные ({{ homework_graded_count }})</button>
+            <button class="hw-tab-btn" data-filter="process">В процессе ({{ homework_process_count }})</button>
+        </div>
+
+        <!-- Список блоков заданий -->
+        <div class="hw-list">
+            <!-- На проверке -->
+            {% for hw in homework_checking %}
+            <div class="hw-card hw-card-clickable" data-category="checking"
+                 data-id="{{ hw.id }}"
+                 data-title="{{ hw.title }}"
+                 data-description="{{ hw.description|escapejs }}"
+                 data-status="checking"
+                 data-grade="{{ hw.grade|default:'' }}"
+                 data-submitted-at="{{ hw.submitted_at|date:'d.m.Y, H:i'|default:'' }}"
+                 data-deadline="{{ hw.deadline|date:'d.m.Y'|default:'' }}">
+                <div class="hw-card-main">
+                    <div class="hw-title">{{ hw.title }}</div>
+                    <div class="hw-details">
+                        <span class="hw-status checking">Статус: На проверке</span>
+                        <span class="hw-date">Сдано: {{ hw.submitted_at|date:"d.m.Y, H:i" }}</span>
+                    </div>
+                </div>
+                <div class="hw-file-section">
+                    <div class="hw-file-attachment">
+                        <span class="hw-file-icon">📎</span>
+                        <span class="hw-file-name">solution_{{ hw.id }}.zip</span>
+                    </div>
+                    <button class="hw-btn hw-btn-replace" data-id="{{ hw.id }}">Заменить</button>
+                </div>
+            </div>
+            {% empty %}
+            <div class="hw-card" data-category="checking" style="opacity: 0.6;">
+                <div class="hw-title">Нет заданий на проверке</div>
+                <div class="hw-details">
+                    <span class="hw-status checking">Все задания проверены</span>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Оцененные (скрыты по умолчанию) -->
+            {% for hw in homework_graded %}
+            <div class="hw-card hw-card-clickable" data-category="graded" style="display: none;"
+                 data-id="{{ hw.id }}"
+                 data-title="{{ hw.title }}"
+                 data-description="{{ hw.description|escapejs }}"
+                 data-status="graded"
+                 data-grade="{{ hw.grade|default:'' }}"
+                 data-submitted-at="{{ hw.submitted_at|date:'d.m.Y, H:i'|default:'' }}"
+                 data-deadline="{{ hw.deadline|date:'d.m.Y'|default:'' }}">
+                <div class="hw-card-main">
+                    <div class="hw-title">{{ hw.title }}</div>
+                    <div class="hw-details">
+                        <span class="hw-status graded">Оценка: {{ hw.grade }}</span>
+                        <span class="hw-date">Сдано: {{ hw.submitted_at|date:"d.m.Y, H:i" }}</span>
+                    </div>
+                </div>
+                <div class="hw-file-section">
+                    <div class="hw-file-attachment">
+                        <span class="hw-file-icon">📎</span>
+                        <span class="hw-file-name">solution_{{ hw.id }}.zip</span>
+                    </div>
+                    <button class="hw-btn hw-btn-replace" data-id="{{ hw.id }}">Заменить</button>
+                </div>
+            </div>
+            {% empty %}
+            <div class="hw-card" data-category="graded" style="display: none; opacity: 0.6;">
+                <div class="hw-title">Нет оцененных заданий</div>
+            </div>
+            {% endfor %}
+
+            <!-- В процессе (скрыты по умолчанию) -->
+            {% for hw in homework_process %}
+            <div class="hw-card hw-card-clickable" data-category="process" style="display: none;"
+                 data-id="{{ hw.id }}"
+                 data-title="{{ hw.title }}"
+                 data-description="{{ hw.description|escapejs }}"
+                 data-status="process"
+                 data-grade="{{ hw.grade|default:'' }}"
+                 data-submitted-at="{{ hw.submitted_at|date:'d.m.Y, H:i'|default:'' }}"
+                 data-deadline="{{ hw.deadline|date:'d.m.Y'|default:'' }}">
+                <div class="hw-card-main">
+                    <div class="hw-title">{{ hw.title }}</div>
+                    <div class="hw-details">
+                        <span class="hw-status process">Статус: В процессе</span>
+                        <span class="hw-date">Дедлайн: {{ hw.deadline|date:"d.m.Y" }}</span>
+                    </div>
+                </div>
+                <div class="hw-file-section hw-file-section-empty">
+                    <span class="hw-paperclip-icon">📎</span>
+                    <button class="hw-btn hw-btn-submit" data-id="{{ hw.id }}">Отправить</button>
+                </div>
+            </div>
+            {% empty %}
+            <div class="hw-card" data-category="process" style="display: none; opacity: 0.6;">
+                <div class="hw-title">Нет заданий в процессе</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Полноэкранное окно деталей задания (внутри вкладки Homeworks) -->
+    <div class="hw-detail-view" id="hwDetailView" style="display:none;">
+        <div class="hw-detail-container">
+            <div class="hw-detail-header">
+                <button class="hw-detail-back" id="hwDetailBack">← Назад к списку</button>
+                <h2 class="hw-detail-title" id="hwDetailTitle">Детали задания</h2>
+            </div>
+            <div class="hw-detail-body">
+                <div class="hw-detail-info">
+                    <div class="hw-detail-info-row">
+                        <span class="hw-detail-info-label">Статус:</span>
+                        <span class="hw-detail-info-value" id="hwDetailStatus"></span>
+                    </div>
+                    <div class="hw-detail-info-row" id="hwDetailGradeRow" style="display:none;">
+                        <span class="hw-detail-info-label">Оценка:</span>
+                        <span class="hw-detail-info-value" id="hwDetailGrade"></span>
+                    </div>
+                    <div class="hw-detail-info-row" id="hwDetailSubmittedRow" style="display:none;">
+                        <span class="hw-detail-info-label">Сдано:</span>
+                        <span class="hw-detail-info-value" id="hwDetailSubmitted"></span>
+                    </div>
+                    <div class="hw-detail-info-row" id="hwDetailDeadlineRow" style="display:none;">
+                        <span class="hw-detail-info-label">Дедлайн:</span>
+                        <span class="hw-detail-info-value" id="hwDetailDeadline"></span>
+                    </div>
+                </div>
+                <div class="hw-detail-description">
+                    <h4>Описание задания:</h4>
+                    <p id="hwDetailDescription"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

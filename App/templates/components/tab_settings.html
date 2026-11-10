@@ -1,0 +1,112 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/tab_settings.css' %}">
+<script type="module" src="{% static 'js/dashboard-f/settings.js' %}"></script>
+
+<div class="tab-pane w-full" id="settings">
+    <div class="settings-container w-full max-w-full">
+        <h2>Настройки системы</h2>
+
+        <!-- 1. Профиль -->
+        <div class="setting-card w-full max-w-full">
+            <div class="setting-info">
+                <h3>Профиль</h3>
+                <p>Управление личной информацией и данными аккаунта</p>
+            </div>
+            <button class="setting-btn" id="btnProfile">Изменить</button>
+        </div>
+
+        <!-- 2. Конфиденциальность -->
+        <div class="setting-card w-full max-w-full">
+            <div class="setting-info">
+                <h3>Конфиденциальность</h3>
+                <p>Управление видимостью профиля и историей активности</p>
+            </div>
+            <label class="switch">
+                <input type="checkbox" checked id="togglePrivacy">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- 3. Уведомления -->
+        <div class="setting-card w-full max-w-full">
+            <div class="setting-info">
+                <h3>Уведомления</h3>
+                <p>Получать оповещения о событиях и сообщениях</p>
+            </div>
+            <label class="switch">
+                <input type="checkbox" checked id="toggleNotifications">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- 4. Вид -->
+        <div class="setting-card w-full max-w-full">
+            <div class="setting-info">
+                <h3>Внешний вид</h3>
+                <p>Переключение темы интерфейса</p>
+            </div>
+            <select class="setting-select" id="selectTheme">
+                <option value="dark">Тёмная (по умолчанию)</option>
+                <option value="light">Светлая</option>
+                <option value="auto">Системная</option>
+            </select>
+        </div>
+
+        <!-- 4b. Кастомный курсор -->
+        <div class="setting-card w-full max-w-full">
+            <div class="setting-info">
+                <h3>Кастомный курсор</h3>
+                <p>Анимированная точка, следующая за курсором мыши</p>
+            </div>
+            <label class="switch">
+                <input type="checkbox" checked id="toggleCustomCursor">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- 4c. Создание своего курсора -->
+        <div class="setting-card w-full max-w-full">
+            <div class="setting-info">
+                <h3>Создать свой курсор</h3>
+                <p>Напишите свой CSS для стилизации курсора мыши</p>
+            </div>
+            <button class="setting-btn" id="btnCreateCursor">Создать курсор</button>
+        </div>
+
+        <!-- 4d. Мои курсоры -->
+        <div class="setting-card w-full max-w-full">
+            <div class="setting-info">
+                <h3>Мои курсоры</h3>
+                <p>Управление сохранёнными курсорами</p>
+            </div>
+            <button class="setting-btn" id="btnMyCursors">Мои курсоры</button>
+        </div>
+
+        <!-- 4e. Галерея курсоров -->
+        <div class="setting-card w-full max-w-full">
+            <div class="setting-info">
+                <h3>Галерея курсоров</h3>
+                <p>Искать опубликованные мышки от других пользователей</p>
+            </div>
+            <button class="setting-btn" id="btnBrowseCursors">Искать опубликованные мышки</button>
+        </div>
+
+        <!-- 5. Поддержка -->
+        <div class="setting-card w-full max-w-full">
+            <div class="setting-info">
+                <h3>Поддержка</h3>
+                <p>Связаться с разработчиком или сообщить об ошибке</p>
+            </div>
+            <button class="setting-btn" id="btnSupport">Написать</button>
+        </div>
+
+        <!-- 6. Сброс настроек -->
+        <div class="setting-card danger-zone w-full max-w-full">
+            <div class="setting-info">
+                <h3>Сброс настроек</h3>
+                <p>Вернуть все параметры к заводским значениям</p>
+            </div>
+            <button class="setting-btn danger-btn" id="btnResetSettings">Сбросить</button>
+        </div>
+    </div>
+</div>

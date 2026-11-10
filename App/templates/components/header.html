@@ -1,0 +1,27 @@
+<header class="top-header flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-8 py-6 border-b sticky top-0 z-40" style="border-color: var(--border-header);">
+    <div class="user-greeting">
+        <h2 class="text-2xl font-bold" style="color: var(--text-heading);">Привет, <span id="username-display">{{ user.username }}</span>! </h2>
+        <p class="text-sm" style="color: var(--text-muted);">Добро пожаловать обратно на платформу EduDash.</p>
+    </div>
+    <div class="flex items-center gap-3 flex-wrap">
+        <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl border" style="background-color: var(--bg-pill); border-color: var(--border-card);">
+            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-400 text-amber-950 font-bold text-[10px] border border-amber-300 shadow-sm" style="font-family: monospace;">¢</span>
+            <span class="text-sm font-bold" style="color: var(--text-pill);" id="header-coins">50 монеток</span>
+        </div>
+        <div class="flex items-center space-x-2 px-4 py-2 rounded-xl border" style="background-color: var(--bg-pill); border-color: var(--border-card);">
+            <span class="text-lg"></span>
+            <span class="text-sm font-bold text-amber-400">5 дней стрика</span>
+        </div>
+
+        <!-- Иконка настроек -->
+        <button onclick="document.querySelector('[data-tab=settings]').click()" class="p-2.5 hover:text-indigo-400 rounded-xl border transition shadow-sm" style="background-color: var(--bg-pill); color: var(--text-pill); border-color: var(--border-card);" title="Настройки системы">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        </button>
+
+        <!-- Кнопка Выхода -->
+        <a href="{% url 'logout' %}" class="flex items-center space-x-2 hover:bg-red-900/30 text-red-400 px-4 py-2 rounded-xl border border-red-900/40 transition font-medium text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            <span>Выйти</span>
+        </a>
+    </div>
+</header>

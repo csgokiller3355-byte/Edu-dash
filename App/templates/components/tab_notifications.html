@@ -1,0 +1,14 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/tab_notifications.css' %}">
+<script type="module" src="{% static 'js/dashboard-f/notifications.js' %}"></script>
+
+<div class="tab-pane" id="notifications">
+    <h2>Уведомления</h2>
+    <p>Здесь вы увидите ответы от администратора на ваши обращения в поддержку.</p>
+
+    <div id="notifications-list" style="margin-top: 20px;">
+        <div class="card" style="opacity: 0.6;">
+            <p>Загрузка уведомлений...</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учебный Дашборд</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- CodeMirror 5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/selection/active-line.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+</head>
+<body>
+    {% csrf_token %}
+    <div class="app-container flex h-screen overflow-hidden">
+
+        <!-- 1. Боковое меню -->
+        {% include 'components/sidebar.html' %}
+
+        <!-- Основной контент -->
+        <main class="main-content flex-grow overflow-y-auto flex flex-col" style="background-color: var(--bg-body);">
+
+            <!-- 2. Верхняя панель -->
+            {% include 'components/header.html' %}
+
+            <!-- 3. Контент всех вкладок -->
+            <div class="tab-content p-8">
+                {% include 'components/tab_dashboard.html' %}
+                {% include 'components/tab_homework.html' %}
+                {% include 'components/tab_materials.html' %}
+                {% include 'components/tab_projects.html' %}
+                {% include 'components/tab_calendar.html' %}
+                {% include 'components/tab_shop.html' %}
+                {% include 'components/tab_minigames.html' %}
+                {% include 'components/tab_feedback.html' %}
+                {% include 'components/tab_faq.html' %}
+                {% include 'components/tab_notifications.html' %}
+                {% include 'components/tab_settings.html' %}
+            </div>
+
+        </main>
+    </div>
+
+    <!-- JavaScript-модуль -->
+    <script type="module" src="{% static 'js/dashboard.js' %}"></script>
+
+    <!-- Всплывающее уведомление (Toast) -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-gray-950/90 text-white px-4 py-3 rounded-xl border border-white/20 shadow-2xl backdrop-blur-xl transition-all duration-300">
+        <span id="toastMessage">Сообщение</span>
+    </div>
+</body>
+</html>

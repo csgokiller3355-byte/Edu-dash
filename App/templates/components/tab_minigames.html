@@ -1,0 +1,111 @@
+{% load static %}
+<div class="tab-pane" id="minigames">
+    <link rel="stylesheet" href="{% static 'css/tab_minigames.css' %}">
+    <div class="max-w-6xl mx-auto space-y-8">
+        <h2 class="text-3xl font-extrabold text-center" style="color: var(--text-heading);">Пиксельные мини-игры & Свой код</h2>
+
+        <!-- ГЛАВНОЕ МЕНЮ АРКАДЫ (4 большие кнопки на всю горизонталь) -->
+        <div id="mainMenu" class="menu-screen space-y-8">
+            <!-- 4 мини-игры в одном ряду -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+                <button class="menu-btn h-28 px-4 bg-gradient-to-br from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold rounded-2xl shadow-lg flex items-center justify-center text-center transition transform hover:-translate-y-1 text-sm md:text-base" data-mode="1">
+                    Дуэль (Медленные пули, 4 выстрела)
+                </button>
+                <button class="menu-btn h-28 px-4 bg-gradient-to-br from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold rounded-2xl shadow-lg flex items-center justify-center text-center transition transform hover:-translate-y-1 text-sm md:text-base" data-mode="2">
+                    2. Реакция по центру
+                </button>
+                <button class="menu-btn h-28 px-4 bg-gradient-to-br from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold rounded-2xl shadow-lg flex items-center justify-center text-center transition transform hover:-translate-y-1 text-sm md:text-base" data-mode="3">
+                    3. Тир (Обратный отсчет + 10 мишеней)
+                </button>
+                <button class="menu-btn h-28 px-4 bg-gradient-to-br from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold rounded-2xl shadow-lg flex items-center justify-center text-center transition transform hover:-translate-y-1 text-sm md:text-base" data-mode="4">
+                    4. Тест комбинаций (Раздельные экраны)
+                </button>
+            </div>
+
+            <!-- Галерея опубликованных игр -->
+            <div class="text-center">
+                <button type="button" id="btnBrowseGames" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold rounded-2xl shadow-xl transition transform hover:-translate-y-1 text-base">
+                    🎮 Искать опубликованные игры
+                </button>
+            </div>
+        </div>
+
+        <!-- БЛОК ПОЛЬЗОВАТЕЛЬСКОЙ ИГРЫ (Адаптирован под тему через CSS-переменные) -->
+        <div class="p-8 rounded-3xl shadow-2xl space-y-6 w-full" style="background: var(--bg-setting-card); border: 1px solid var(--border-setting-card);">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4" style="border-bottom: 1px solid var(--border-header);">
+                <div>
+                    <h3 class="text-xl font-bold flex items-center gap-2" style="color: var(--text-heading);"><span>🎮</span> Конструктор своей игры</h3>
+                    <p class="text-sm" style="color: var(--text-secondary);">Пишите разметку, стили и логику раздельно по вкладкам</p>
+                </div>
+
+                <!-- Меню-переключатель вкладок (HTML / CSS / JS) -->
+                <div class="flex items-center p-1.5 rounded-2xl space-x-1" style="background: var(--bg-sub-btn); border: 1px solid var(--border-card);">
+                    <button type="button" class="code-tab-btn px-5 py-2 rounded-xl text-xs font-bold transition bg-indigo-600 text-white shadow" data-target="html">HTML</button>
+                    <button type="button" class="code-tab-btn px-5 py-2 rounded-xl text-xs font-bold transition hover:opacity-80" style="color: var(--text-secondary);" data-target="css">CSS</button>
+                    <button type="button" class="code-tab-btn px-5 py-2 rounded-xl text-xs font-bold transition hover:opacity-80" style="color: var(--text-secondary);" data-target="js">JS</button>
+                </div>
+            </div>
+
+            <!-- Слоты сохранения -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <span class="text-sm font-semibold whitespace-nowrap" style="color: var(--text-secondary);">💾 Сохранённые слоты:</span>
+                <div class="flex flex-wrap gap-2" id="slotButtons">
+                    <!-- Слоты будут динамически добавлены через JavaScript -->
+                </div>
+                <div class="flex gap-2 ml-auto">
+                    <select id="selectedSlot" class="px-3 py-2 rounded-xl text-xs font-bold focus:outline-none focus:border-indigo-500" style="background: var(--bg-setting-select); color: var(--text-setting-select); border: 1px solid var(--border-setting-select);">
+                        <option value="">— Выберите слот —</option>
+                    </select>
+                    <button type="button" id="addSlotBtn" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-blue-600 text-white hover:bg-blue-500 shadow" title="Добавить новый слот">
+                        + Слот
+                    </button>
+                    <!-- Public/Private toggle -->
+                    <label class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold cursor-pointer transition" style="background: var(--bg-sub-btn); border: 1px solid var(--border-card);">
+                        <input type="checkbox" id="gamePublicToggle" class="rounded">
+                        <span style="color: var(--text-secondary);">Публичная</span>
+                    </label>
+                    <button type="button" id="saveCustomGameBtn" class="px-5 py-2 rounded-xl text-xs font-bold transition bg-emerald-600 text-white hover:bg-emerald-500 shadow">
+                        💾 Сохранить проект
+                    </button>
+                </div>
+            </div>
+
+            <!-- Редакторы кода -->
+            <div class="relative">
+                <div class="code-pane" id="pane-html">
+                    <textarea id="codeHtml" rows="20" placeholder="<div id='game-box'>&#10;  <h2>Моя игра</h2>&#10;  <button id='clickBtn'>Кликни меня!</button>&#10;</div>" class="w-full p-5 rounded-2xl font-mono text-xs focus:outline-none focus:border-indigo-500 leading-relaxed" style="background: var(--bg-input); color: var(--text-primary); border: 1px solid var(--border-input);"></textarea>
+                </div>
+                <div class="code-pane" id="pane-css" style="display: none;">
+                    <textarea id="codeCss" rows="20" placeholder="body { background: #0f172a; color: white; text-align: center; font-family: sans-serif; }&#10;#game-box { margin-top: 50px; }" class="w-full p-5 rounded-2xl font-mono text-xs focus:outline-none focus:border-indigo-500 leading-relaxed" style="background: var(--bg-input); color: var(--text-primary); border: 1px solid var(--border-input);"></textarea>
+                </div>
+                <div class="code-pane" id="pane-js" style="display: none;">
+                    <textarea id="codeJs" rows="20" placeholder="document.getElementById('clickBtn').addEventListener('click', () => {&#10;  alert('Привет!');&#10;});" class="w-full p-5 rounded-2xl font-mono text-xs focus:outline-none focus:border-indigo-500 leading-relaxed" style="background: var(--bg-input); color: var(--text-primary); border: 1px solid var(--border-input);"></textarea>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button id="runCustomGameBtn" class="flex-1 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 text-sm tracking-wide">
+                    Запустить собственный проект 🚀
+                </button>
+                <button id="runAndSaveBtn" class="px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 text-sm tracking-wide whitespace-nowrap">
+                    Запустить и сохранить
+                </button>
+            </div>
+        </div>
+
+        <!-- ИГРОВОЙ ЭКРАН -->
+        <div id="gameContainer" class="game-container" style="display: none;">
+            <button class="back-btn" id="backToMenuBtn">← В главное меню</button>
+            <div class="ui" id="statusText">Игра запущена</div>
+
+            <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+            <div id="customGameWrapper" style="display: none; width: 100%; height: 500px;">
+                <iframe id="customGameFrame" style="width: 100%; height: 100%; border: none; border-radius: 12px;"></iframe>
+            </div>
+
+            <div class="hint" id="hintText">Управление</div>
+        </div>
+    </div>
+    <script type="module" src="{% static 'js/dashboard-f/minigames.js' %}"></script>
+</div>
