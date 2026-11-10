@@ -46,10 +46,7 @@ db.sqlite3-journal
 Thumbs.db
 Desktop.ini
 
-# Docker
-.dockerignore
-Dockerfile
-docker-compose.yml
+
 
 # Junie
 .junie/
@@ -57,5 +54,4 @@ docker-compose.yml
 # Misc
 *.tmp
 .cache/
-*.json
-App/*.json
+App/edudash-*.json
