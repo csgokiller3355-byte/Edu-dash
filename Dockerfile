@@ -32,7 +32,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # Install runtime system dependencies for psycopg2
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
-    && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy installed Python packages from builder
@@ -44,12 +43,11 @@ WORKDIR /app
 # Copy project files
 COPY . .
 
-# Collect static files
-# Collect static files
+# Collect static files (указываем путь к manage.py с учетом папки App)
 RUN python App/manage.py collectstatic --noinput
 
 # Expose port (Render will override PORT at runtime)
 EXPOSE 8000
 
-# Run Gunicorn, binding to Render's PORT env var with fallback to 8000
-CMD ["sh", "-c", "gunicorn App.App.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
+# Run Gunicorn, добавляем PYTHONPATH=. чтобы Python корректно видел вложенный пакет App.App.wsgi
+CMD ["sh", "-c", "PYTHONPATH=. gunicorn App.App.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
