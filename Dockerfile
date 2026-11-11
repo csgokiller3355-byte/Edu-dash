@@ -52,4 +52,4 @@ RUN python App/manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Run Gunicorn, binding to Render's PORT env var with fallback to 8000
-CMD ["sh", "-c", "gunicorn App.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
+CMD ["sh", "-c", "gunicorn App.App.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
