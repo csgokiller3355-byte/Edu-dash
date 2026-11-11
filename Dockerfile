@@ -30,15 +30,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=builder /install /usr/local
 
-# Всегда работаем в корне /app, чтобы пути относительно него были предсказуемыми
-WORKDIR /app
+# Устанавливаем рабочей директорией папку App, где лежит manage.py
+WORKDIR /app/App
 
-COPY . .
+# Копируем содержимое корня проекта внутрь /app/App
+COPY . /app/App
 
-# Сборка статики через явный путь к manage.py
-RUN python App/manage.py collectstatic --noinput
+# Собираем статику из текущей директории
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-# Запуск Gunicorn с PYTHONPATH=. чтобы Python видел вложенный пакет App.App.wsgi
-CMD ["sh", "-c", "PYTHONPATH=. gunicorn App.App.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
+# Запускаем Gunicorn (так как мы находимся в /app/App, путь к wsgi: App.wsgi:application)
+CMD ["sh", "-c", "gunicorn App.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
