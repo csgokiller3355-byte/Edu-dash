@@ -37,17 +37,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy installed Python packages from builder
 COPY --from=builder /install /usr/local
 
-# Set work directory
-WORKDIR /app
+# Set work directory to the inner App folder where manage.py is located
+WORKDIR /app/App
 
-# Copy project files
-COPY . .
+# Copy project files from root into /app/App
+COPY . /app/App
 
-# Collect static files (указываем путь к manage.py с учетом папки App)
-RUN python App/manage.py collectstatic --noinput
+# Collect static files
+RUN python manage.py collectstatic --noinput
 
 # Expose port (Render will override PORT at runtime)
 EXPOSE 8000
 
-# Run Gunicorn, добавляем PYTHONPATH=. чтобы Python корректно видел вложенный пакет App.App.wsgi
-CMD ["sh", "-c", "PYTHONPATH=. gunicorn App.App.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
+# Run Gunicorn (since WORKDIR is /app/App, module path is simply App.wsgi:application)
+CMD ["sh", "-c", "gunicorn App.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
