@@ -45,7 +45,8 @@ WORKDIR /app
 COPY . .
 
 # Collect static files
-RUN python manage.py collectstatic --noinput
+# Collect static files
+RUN python App/manage.py collectstatic --noinput
 
 # Expose port (Render will override PORT at runtime)
 EXPOSE 8000
