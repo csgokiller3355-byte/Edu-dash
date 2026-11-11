@@ -13,3 +13,6 @@ dj-database-url>=1.0,<2.0
 
 # Environment variables
 python-dotenv>=1.0,<2.0
+google-api-python-client
+google-auth
+google-auth-oauthlib
